@@ -99,6 +99,11 @@ export interface AddToCartData extends EventData {
   eventName: 'vtex:addToCart'
   items: CartItem[]
 }
+export interface MuralsAddToCartData extends EventData {
+  event: 'addToCart'
+  eventName: 'murals:addToCart'
+  items: CartItem[]
+}
 
 export interface RemoveToCartData extends EventData {
   event: 'removeFromCart'
@@ -196,6 +201,14 @@ interface CartItem {
   skuId: string
   referenceId: string // SKU reference id
   variant: string
+}
+
+interface MuralsCartItem {
+  id: string
+  name: string
+  price: number
+  sellingPrice: number
+  referenceId: string // SKU reference id
 }
 
 interface Totalizer {

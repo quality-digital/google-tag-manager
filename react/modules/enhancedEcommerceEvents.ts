@@ -5,12 +5,12 @@ import {
   ProductOrder,
   Impression,
   CartItem,
-  AddToCartData,
   RemoveToCartData,
   ProductViewData,
   Seller,
   ProductClickData,
   ProductViewReferenceId,
+  MuralsAddToCartData,
 } from '../typings/events'
 import { AnalyticsEcommerceProduct } from '../typings/gtm'
 
@@ -141,26 +141,21 @@ export async function sendEnhancedEcommerceEvents(e: PixelMessage) {
       return
     }
 
-    case 'vtex:addToCart': {
-      const { items } = e.data as AddToCartData
+    case 'murals:addToCart': {
+      const { items } = e.data as MuralsAddToCartData
 
       const data = {
         ecommerce: {
           add: {
             products: items.map(item => ({
-              brand: item.brand,
-              category: item.category,
               id: item.productId,
-              variant: item.skuId,
-              name: item.name, // Product name
+              name: item.name, 
               price:
                 item.priceIsInt === true
                   ? `${item.price / 100}`
                   : `${item.price}`,
-              quantity: item.quantity,
-              dimension1: item.productRefId ?? '',
-              dimension2: item.referenceId ?? '', // SKU reference id
-              dimension3: item.variant, // SKU name (variant)
+              sellingPrice: item.sellingPrice,
+              referenceId: item.referenceId
             })),
           },
           currencyCode: e.data.currency,
@@ -169,6 +164,7 @@ export async function sendEnhancedEcommerceEvents(e: PixelMessage) {
       }
 
       updateEcommerce('addToCart', data)
+
 
       return
     }
